@@ -14,7 +14,7 @@ public class AlgoritmoGenetico {
     private int tamCromossomo=0,numGeracoes,tamPopulacao,
                  probMutacao,qtdeCruzamentos;
     private double capacidade = 0;
-    private Vector<Vector> populacao;
+    private Vector<Vector>  populacao;
     private Vector<Produto> produtos = new Vector();
     private Vector<Integer> roleta = new Vector();
     //--------------------------------
@@ -43,11 +43,20 @@ public class AlgoritmoGenetico {
     
     //-------------------------
     private Vector criaCromossomo(){
-        
+        Vector cromossomo = new Vector();
+        for(int i=0;i<tamCromossomo;i++){
+            if(Math.random()<0.6)
+                cromossomo.add(0);
+            else
+                cromossomo.add(1);
+        }// fim for
+        return cromossomo;
     }
   //---------------------------------- 
     private void criaPopulacao(){
-      
+      populacao = new Vector();
+      for(int i=0;i<tamPopulacao;i++)
+           populacao.add(criaCromossomo());
     }
     //----------------------------------
      private double fitness(Vector cromossomo) {
@@ -69,7 +78,15 @@ public class AlgoritmoGenetico {
      
       //------------------------------------------
      private int roleta(){
-       
+       Vector roletaVirtual = new Vector();
+       for(int i=0;i<tamPopulacao;i++){
+          double nota = fitness(populacao.get(i));
+          for(int j=0;j<=nota;j++)
+               roletaVirtual.add(i);
+       }// fim for
+       Random r = new Random();
+       int sorteado = r.nextInt(roletaVirtual.size());
+       return (int)roletaVirtual.get(sorteado);
      }
    //-----------------------------------------------
     private int torneio(){ // Seleção dos pais
